@@ -16,7 +16,7 @@ public class ServoGroup {
     }
 
     public void from(int min, int max, Consumer<Servo> action) {
-        for (int i = min; i <= max; i++) {
+        for (int i = min; i < max; i++) {
             Servo servo = servos[i];
             if (servo != null) action.accept(servo);
         }

@@ -17,6 +17,7 @@ public class ExampleTeleOp extends LinearOpMode {
 
     private void onInit() {
         hardware.init();
+        hardware.updateHeadingOffsetFromAllianceButton();
     }
 
     private void onLoop() {
@@ -26,15 +27,14 @@ public class ExampleTeleOp extends LinearOpMode {
 
         telemetry.addLine("--- ROBOT DATA ---");
         telemetry.addData("Position", data);
-        double VelX = hardware.pinpoint.getVelX(DistanceUnit.MM);
-        double VelY = hardware.pinpoint.getVelY(DistanceUnit.MM);
+        double velX = hardware.pinpoint.getVelX(DistanceUnit.MM);
+        double velY = hardware.pinpoint.getVelY(DistanceUnit.MM);
         double headingVel = hardware.pinpoint.getHeadingVelocity(UnnormalizedAngleUnit.DEGREES);
 
         telemetry.addData("Wheel Power Dampening", hardware.getPowerDampener());
-        telemetry.addData("Velocities (mm/s,deg/s)", "X: %.0f  Y: %.0f  H: %.1f", VelX, VelY, headingVel);
+        telemetry.addData("Velocities (mm/s,deg/s)", "X: %.0f  Y: %.0f  H: %.1f", velX, velY, headingVel);
         telemetry.addLine("---------------------------");
 
-        hardware.updateHeadingOffsetFromAllianceButton();
         double botHeading = hardware.pinpoint.getHeading(AngleUnit.RADIANS);
         double adjustedHeading = hardware.applyHeadingOffset(botHeading);
 
@@ -42,7 +42,7 @@ public class ExampleTeleOp extends LinearOpMode {
         double x = gamepad1.left_stick_x;
         double rx = gamepad1.right_stick_x;
 
-        hardware.FieldCentricDrive(x, y, rx, adjustedHeading);
+        hardware.fieldCentricDrive(x, y, rx, adjustedHeading);
 
         // Left Stick - Power dampen by half, if pressed again will set back to 1.
         if (gamepad1.leftStickButtonWasPressed()) hardware.setPowerDampener(0.5);

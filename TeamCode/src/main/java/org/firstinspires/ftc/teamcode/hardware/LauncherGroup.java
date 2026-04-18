@@ -14,6 +14,8 @@ import java.util.Locale;
 
 public class LauncherGroup {
     private final RobotHardware hardware;
+    private final FlywheelPidfConfig flywheelPidfConfig;
+
     public DcMotorExGroup group;
 
     private double lastLauncherBaseP = Double.NaN;
@@ -23,8 +25,9 @@ public class LauncherGroup {
     private double lastLauncherScaledP = Double.NaN;
     private double lastLauncherScaledF = Double.NaN;
 
-    public LauncherGroup(RobotHardware hardware, DcMotorExGroup launcherMotors) {
+    public LauncherGroup(RobotHardware hardware, FlywheelPidfConfig flywheelPidfConfig, DcMotorExGroup launcherMotors) {
         this.hardware = hardware;
+        this.flywheelPidfConfig = flywheelPidfConfig;
 
         Telemetry telemetry = hardware.getTelemetry();
         if (launcherMotors == null || launcherMotors.motors.length < 2) {
@@ -43,19 +46,19 @@ public class LauncherGroup {
     }
 
     public void applyLauncherPIDFTuning() {
-        double gearScaledP = FlywheelPidfConfig.launcherP * Constants.LAUNCHER_GEAR_REDUCTION;
-        double gearScaledI = FlywheelPidfConfig.launcherI * Constants.LAUNCHER_GEAR_REDUCTION;
-        double gearScaledD = FlywheelPidfConfig.launcherD * Constants.LAUNCHER_GEAR_REDUCTION;
-        double gearScaledF = FlywheelPidfConfig.launcherF * Constants.LAUNCHER_GEAR_REDUCTION;
+        double gearScaledP = flywheelPidfConfig.launcherP * Constants.LAUNCHER_GEAR_REDUCTION;
+        double gearScaledI = flywheelPidfConfig.launcherI * Constants.LAUNCHER_GEAR_REDUCTION;
+        double gearScaledD = flywheelPidfConfig.launcherD * Constants.LAUNCHER_GEAR_REDUCTION;
+        double gearScaledF = flywheelPidfConfig.launcherF * Constants.LAUNCHER_GEAR_REDUCTION;
 
         PIDFCoefficients pidf = new PIDFCoefficients(gearScaledP, gearScaledI, gearScaledD, gearScaledF);
 
         group.setVelocityPIDFCoefficients(pidf.p, pidf.i, pidf.d, pidf.f);
 
-        lastLauncherBaseP = FlywheelPidfConfig.launcherP;
-        lastLauncherBaseI = FlywheelPidfConfig.launcherI;
-        lastLauncherBaseD = FlywheelPidfConfig.launcherD;
-        lastLauncherBaseF = FlywheelPidfConfig.launcherF;
+        lastLauncherBaseP = flywheelPidfConfig.launcherP;
+        lastLauncherBaseI = flywheelPidfConfig.launcherI;
+        lastLauncherBaseD = flywheelPidfConfig.launcherD;
+        lastLauncherBaseF = flywheelPidfConfig.launcherF;
         lastLauncherScaledP = pidf.p;
         lastLauncherScaledF = pidf.f;
 
@@ -63,10 +66,10 @@ public class LauncherGroup {
     }
 
     public void refreshLauncherPIDFFromConfig() {
-        boolean baseChanged = FlywheelPidfConfig.launcherP != lastLauncherBaseP
-                || FlywheelPidfConfig.launcherI != lastLauncherBaseI
-                || FlywheelPidfConfig.launcherD != lastLauncherBaseD
-                || FlywheelPidfConfig.launcherF != lastLauncherBaseF;
+        boolean baseChanged = flywheelPidfConfig.launcherP != lastLauncherBaseP
+                || flywheelPidfConfig.launcherI != lastLauncherBaseI
+                || flywheelPidfConfig.launcherD != lastLauncherBaseD
+                || flywheelPidfConfig.launcherF != lastLauncherBaseF;
 
         if (baseChanged || !Double.isFinite(lastLauncherScaledP) || !Double.isFinite(lastLauncherScaledF)) {
             applyLauncherPIDFTuning();

@@ -5,8 +5,7 @@ public class Constants {
 
     ///INTAKE SETPOINTS
 
-    public static final double intakeForwardPower = 0.75;
-    public static final double intakeReversePower = -0.75;
+    public static final double INTAKE_POWER = 0.75;
 
     /// LAUNCHER SETPOINTS
     public static final double DEFAULT_RPM = 1500.0;

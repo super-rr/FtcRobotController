@@ -16,7 +16,7 @@ public class RGBIndicatorGroup {
     }
 
     public void from(int min, int max, Consumer<RGBIndicator> action) {
-        for (int i = min; i <= max; i++) {
+        for (int i = min; i < max; i++) {
             RGBIndicator rgbIndicator = rgbIndicators[i];
             if (rgbIndicator != null) action.accept(rgbIndicator);
         }

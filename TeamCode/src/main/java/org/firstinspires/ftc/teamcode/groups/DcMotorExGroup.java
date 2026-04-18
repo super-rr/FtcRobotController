@@ -22,7 +22,7 @@ public class DcMotorExGroup {
     }
 
     public void from(int min, int max, Consumer<DcMotorEx> action) {
-        for (int i = min; i <= max; i++) {
+        for (int i = min; i < max; i++) {
             DcMotorEx motor = motors[i];
             if (motor != null) action.accept(motor);
         }

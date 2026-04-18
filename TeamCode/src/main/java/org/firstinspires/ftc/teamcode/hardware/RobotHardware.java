@@ -39,6 +39,8 @@ public class RobotHardware {
     /// Constants
     // Example: GoBilda 5202/5203/5204 encoder = 28 ticks/rev
     private static final double TICKS_PER_REV = 28.0;
+    public final FlywheelPidfConfig flywheelPidfConfig = new FlywheelPidfConfig();
+    public final TurretAimConfig turretAimConfig = new TurretAimConfig();
 
     /// Enums
     public enum AllianceColor {
@@ -122,7 +124,7 @@ public class RobotHardware {
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Launcher
-        launcher = new LauncherGroup(this, new DcMotorExGroup(
+        launcher = new LauncherGroup(this, flywheelPidfConfig, new DcMotorExGroup(
                 getMotor("launcher"),
                 getMotor("launcher2")
         ));
@@ -161,8 +163,8 @@ public class RobotHardware {
         distance3 = getDistanceSensor("color3");
 
         // Config
-        PanelsConfigurables.INSTANCE.refreshClass(FlywheelPidfConfig.class);
-        PanelsConfigurables.INSTANCE.refreshClass(TurretAimConfig.class);
+        PanelsConfigurables.INSTANCE.refreshClass(flywheelPidfConfig);
+        PanelsConfigurables.INSTANCE.refreshClass(turretAimConfig);
         launcher.refreshLauncherPIDFFromConfig();
         flushPanels();
 
@@ -205,7 +207,7 @@ public class RobotHardware {
     }
 
     public void refreshAllianceFromSwitchState() {
-        allianceColor = AllianceColor.BLUE;
+        allianceColor = AllianceColor.UNKNOWN;
         if (allianceButton != null && allianceButton.getMode() == DigitalChannel.Mode.INPUT) {
             boolean rawSwitchState = allianceButton.getState();
             if (rawSwitchState) allianceColor = AllianceColor.BLUE;
@@ -253,7 +255,7 @@ public class RobotHardware {
     }
 
     /// Movement Methods
-    public void FieldCentricDrive(double x, double y, double rx, double botHeading){
+    public void fieldCentricDrive(double x, double y, double rx, double botHeading){
         double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
         double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
         rotX *= 1.1;
@@ -302,10 +304,10 @@ public class RobotHardware {
     public void runIntake(IntakeDirection direction) {
         switch (direction) {
             case OUT:
-                intake.setPower(Constants.intakeReversePower);
+                intake.setPower(-Constants.INTAKE_POWER);
                 break;
             case IN:
-                intake.setPower(Constants.intakeForwardPower);
+                intake.setPower(Constants.INTAKE_POWER);
                 break;
             default:
                 intake.setPower(0.0);
