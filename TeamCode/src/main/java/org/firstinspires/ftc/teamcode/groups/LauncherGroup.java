@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.hardware;
+package org.firstinspires.ftc.teamcode.groups;
 
 import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.configs.Constants;
 import org.firstinspires.ftc.teamcode.configs.FlywheelPidfConfig;
-import org.firstinspires.ftc.teamcode.groups.DcMotorExGroup;
+import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
 
 import java.util.Locale;
 

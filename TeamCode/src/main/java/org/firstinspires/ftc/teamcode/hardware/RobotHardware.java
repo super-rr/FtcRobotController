@@ -24,6 +24,7 @@ import org.firstinspires.ftc.teamcode.configs.TurretAimConfig;
 import org.firstinspires.ftc.teamcode.drivers.RGBIndicator;
 import org.firstinspires.ftc.teamcode.groups.DcMotorExGroup;
 import org.firstinspires.ftc.teamcode.groups.RGBIndicatorGroup;
+import org.firstinspires.ftc.teamcode.groups.LauncherGroup;
 
 public class RobotHardware {
     /// Systems
@@ -43,6 +44,22 @@ public class RobotHardware {
     public final TurretAimConfig turretAimConfig = new TurretAimConfig();
 
     /// Enums
+    // Group Enums
+    public interface RGBIndicatorPosition {
+        int MAIN_RGB_INDICATOR = 0;
+        int FRONT_LED = 1;
+        int REAR_RGB_1 = 2;
+        int REAR_RGB_2 = 3;
+        int REAR_RGB_3 = 4;
+    }
+
+    public interface WheelsPosition {
+        int FRONT = 0;
+        int BACK = 0;
+    }
+
+    // Main Enums
+
     public enum AllianceColor {
         UNKNOWN,
         RED,
@@ -254,6 +271,10 @@ public class RobotHardware {
         return headingRadians + headingOffsetRadians;
     }
 
+    public AllianceColor getAllianceColor() {
+        return allianceColor;
+    }
+
     /// Movement Methods
     public void fieldCentricDrive(double x, double y, double rx, double botHeading){
         double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
@@ -316,18 +337,23 @@ public class RobotHardware {
     }
 
     /// Lights
+    public void setRgbIndicator(int rgbIndicatorPosition, double pwmValue) {
+        RGBIndicator rgbIndicator = rgbIndicatorGroup.rgbIndicators[rgbIndicatorPosition];
+        if (rgbIndicator != null) rgbIndicator.setColor(pwmValue);
+    }
+
     public void setMainRGBIndicator(double pwmValue) {
-        rgbIndicatorGroup.rgbIndicators[0].setColor(pwmValue); // "rgbLight", 0
+        setRgbIndicator(RGBIndicatorPosition.MAIN_RGB_INDICATOR, pwmValue);
     }
 
     public void setFrontRGBIndicator(double pwmValue) {
-        rgbIndicatorGroup.rgbIndicators[1].setColor(pwmValue); // "frontLED", 1
+        setRgbIndicator(RGBIndicatorPosition.FRONT_LED, pwmValue);
     }
 
     public void setRearRGBIndicators(double pwmValue) {
-        rgbIndicatorGroup.rgbIndicators[2].setColor(pwmValue); // "rearRGB1", 2
-        rgbIndicatorGroup.rgbIndicators[3].setColor(pwmValue); // "rearRGB2", 3
-        rgbIndicatorGroup.rgbIndicators[4].setColor(pwmValue); // "rearRGB3", 4
+        setRgbIndicator(RGBIndicatorPosition.REAR_RGB_1, pwmValue);
+        setRgbIndicator(RGBIndicatorPosition.REAR_RGB_2, pwmValue);
+        setRgbIndicator(RGBIndicatorPosition.REAR_RGB_3, pwmValue);
     }
 
     public LLResult getLatestLimelightResult() {
