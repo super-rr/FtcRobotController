@@ -20,6 +20,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.configs.Constants;
 import org.firstinspires.ftc.teamcode.configs.FlywheelPidfConfig;
+import org.firstinspires.ftc.teamcode.configs.PedroConstants;
 import org.firstinspires.ftc.teamcode.configs.TurretAimConfig;
 import org.firstinspires.ftc.teamcode.drivers.RGBIndicator;
 import org.firstinspires.ftc.teamcode.groups.DcMotorExGroup;
@@ -38,8 +39,6 @@ public class RobotHardware {
     private LLResult latestLimelightResult;
 
     /// Constants
-    // Example: GoBilda 5202/5203/5204 encoder = 28 ticks/rev
-    private static final double TICKS_PER_REV = 28.0;
     public final FlywheelPidfConfig flywheelPidfConfig = new FlywheelPidfConfig();
     public final TurretAimConfig turretAimConfig = new TurretAimConfig();
 
@@ -55,7 +54,7 @@ public class RobotHardware {
 
     public interface WheelsPosition {
         int FRONT = 0;
-        int BACK = 0;
+        int BACK = 1;
     }
 
     // Main Enums
@@ -121,6 +120,9 @@ public class RobotHardware {
 
         // Pinpoint
         pinpoint = linearOpMode.hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
+        double forwardPodOffsetInches = PedroConstants.FORWARD_POD_Y;
+        double strafePodOffsetInches = PedroConstants.STRAFE_POD_X;
+        pinpoint.setOffsets(forwardPodOffsetInches, strafePodOffsetInches, DistanceUnit.INCH);
         pinpoint.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
         pinpoint.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
         pinpoint.resetPosAndIMU();
@@ -375,10 +377,5 @@ public class RobotHardware {
 
     public DistanceSensor getDistanceSensor(String deviceName) {
         return linearOpMode.hardwareMap.get(DistanceSensor.class, deviceName);
-    }
-
-    private double rpmToTicksPerSecond(double rpm) {
-        double motorRpm = rpm * Constants.LAUNCHER_GEAR_REDUCTION;
-        return (motorRpm * TICKS_PER_REV) / 60.0;
     }
 }

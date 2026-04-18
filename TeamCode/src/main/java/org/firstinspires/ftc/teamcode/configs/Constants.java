@@ -45,10 +45,6 @@ public class Constants {
     public static final double KICKER_DOWN = 0.0;
     public static final double KICKER_UP = 1.0;
 
-    /// KICKER STAND POSITION
-    public static final double KICKERSTAND_RETRACTED = 0.35;
-    public static final double KICKERSTAND_NORMAL = 0.9;
-
     /// SHOOTER TIMING (milliseconds)
     public static final long SHOOT_FIRE_DURATION_MS = 300;
     public static final long SHOOT_RETRACT_DURATION_MS = 750;
